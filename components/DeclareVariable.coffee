@@ -15,7 +15,7 @@ class DeclareVariable extends noflo.Component
 
     @inPorts.variable.on 'data', (@variable) =>
     @inPorts.domain.on 'data', (domain) =>
-      if typeof 'domain' is 'string'
+      if typeof domain is 'string'
         @domain = JSON.parse domain
       else
         @domain = domain

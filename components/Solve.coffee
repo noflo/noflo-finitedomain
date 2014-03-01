@@ -19,7 +19,7 @@ class Solve extends noflo.AsyncComponent
       error: new noflo.Port 'object'
 
     @inPorts.variables.on 'data', (variables) =>
-      if typeof 'variables' is 'string'
+      if typeof variables is 'string'
         @variables = variables.split ','
       else
         @variables = variables

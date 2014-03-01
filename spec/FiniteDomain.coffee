@@ -2,6 +2,7 @@ noflo = require 'noflo'
 
 unless noflo.isBrowser()
   chai = require 'chai' unless chai
+  path = require 'path'
 
 describe 'Finite Domain Constrain Solver', ->
   class Callback extends noflo.Component
@@ -36,7 +37,8 @@ describe 'Finite Domain Constrain Solver', ->
       Solve SOLUTION -> IN Callback(Callback)
       """
       noflo.graph.loadFBP fbp.trim(), (graph) ->
-        graph.baseDir = 'noflo-finitedomain'
+        graph.baseDir = 'noflo-finitedomain' if noflo.isBrowser()
+        graph.baseDir = path.resolve(__dirname, '../') unless noflo.isBrowser()
         noflo.createNetwork graph, (network) ->
           network.loader.components.Callback = Callback
           network.connect ->
