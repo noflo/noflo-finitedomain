@@ -9,7 +9,7 @@ class GreaterThan extends noflo.Component
     @inPorts =
       space: new noflo.Port 'object'
       greater: new noflo.Port 'string'
-      than: new noflo.Port 'array'
+      than: new noflo.Port 'string'
     @outPorts =
       space: new noflo.Port 'object'
       error: new noflo.Port 'object'
