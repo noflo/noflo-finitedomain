@@ -14,7 +14,11 @@ class DeclareVariable extends noflo.Component
       error: new noflo.Port 'object'
 
     @inPorts.variable.on 'data', (@variable) =>
-    @inPorts.domain.on 'data', (@domain) =>
+    @inPorts.domain.on 'data', (domain) =>
+      if typeof 'domain' is 'string'
+        @domain = JSON.parse domain
+      else
+        @domain = domain
     @inPorts.space.on 'data', (space) =>
       unless @variable
         @error new Error 'No variable defined'
