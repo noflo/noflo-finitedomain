@@ -1,6 +1,7 @@
 noflo = require 'noflo'
 
 class DeclareVariable extends noflo.Component
+  description: 'Declare a variable into a Finite Domain solving space'
   constructor: ->
     @variable = null
     @domain = null
