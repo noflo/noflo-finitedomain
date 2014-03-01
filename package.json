@@ -38,5 +38,11 @@
   "scripts": {
     "test": "grunt test"
   },
-  "keywords": []
+  "keywords": [],
+  "noflo": {
+    "icon": "puzzle-piece",
+    "components": {
+      "CreateSpace": "components/CreateSpace.coffee"
+    }
+  }
 }

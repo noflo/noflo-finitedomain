@@ -18,6 +18,7 @@
     "component.json"
   ],
   "noflo": {
+    "icon": "puzzle-piece",
     "components": {
       "CreateSpace": "components/CreateSpace.coffee"
     }
