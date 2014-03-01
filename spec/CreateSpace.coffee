@@ -7,25 +7,25 @@ else
 
 describe 'CreateSpace component', ->
   c = null
-  ins = null
-  out = null
+  start = null
+  space = null
   beforeEach ->
     c = CreateSpace.getComponent()
-    ins = noflo.internalSocket.createSocket()
-    out = noflo.internalSocket.createSocket()
-    c.inPorts.in.attach ins
-    c.outPorts.out.attach out
+    start = noflo.internalSocket.createSocket()
+    space = noflo.internalSocket.createSocket()
+    c.inPorts.start.attach start
+    c.outPorts.space.attach space
 
   describe 'when instantiated', ->
     it 'should have an input port', ->
-      chai.expect(c.inPorts.in).to.be.an 'object'
+      chai.expect(c.inPorts.start).to.be.an 'object'
     it 'should have an output port', ->
-      chai.expect(c.outPorts.out).to.be.an 'object'
+      chai.expect(c.outPorts.space).to.be.an 'object'
 
   describe 'creating a computing space', ->
     it 'should be able to initialize one', (done) ->
-      out.on 'data', (space) ->
+      space.on 'data', (space) ->
         chai.expect(space).to.be.an 'object'
         chai.expect(space.propagate).to.be.a 'function'
         done()
-      ins.send null
+      start.send null
