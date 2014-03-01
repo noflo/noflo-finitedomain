@@ -30,7 +30,6 @@ class DeclareVariable extends noflo.Component
 
   declareVar: (space) ->
     space.decl @variable, @domain
-    @variable = null
     @domain = null
 
 exports.getComponent = -> new DeclareVariable
