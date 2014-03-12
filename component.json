@@ -8,7 +8,7 @@
   ],
   "dependencies": {
     "noflo/noflo": "*",
-    "bergie/FD.js": "*"
+    "srikumarks/FD.js": "*"
   },
   "scripts": [
     "components/CreateSpace.coffee",
