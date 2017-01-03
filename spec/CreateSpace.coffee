@@ -1,20 +1,28 @@
 noflo = require 'noflo'
 unless noflo.isBrowser()
-  chai = require 'chai' unless chai
-  CreateSpace = require '../components/CreateSpace.coffee'
+  chai = require 'chai'
+  path = require 'path'
+  baseDir = path.resolve __dirname, '../'
 else
-  CreateSpace = require 'noflo-finitedomain/components/CreateSpace.js'
+  baseDir = 'noflo-finitedomain'
 
 describe 'CreateSpace component', ->
   c = null
   start = null
   space = null
-  beforeEach ->
-    c = CreateSpace.getComponent()
-    start = noflo.internalSocket.createSocket()
-    space = noflo.internalSocket.createSocket()
-    c.inPorts.start.attach start
-    c.outPorts.space.attach space
+  loader = null
+  before ->
+    loader = new noflo.ComponentLoader baseDir
+  beforeEach (done) ->
+    @timeout 4000
+    loader.load 'finitedomain/CreateSpace', (err, instance) ->
+      return done err if err
+      c = instance
+      start = noflo.internalSocket.createSocket()
+      space = noflo.internalSocket.createSocket()
+      c.inPorts.start.attach start
+      c.outPorts.space.attach space
+      done()
 
   describe 'when instantiated', ->
     it 'should have an input port', ->
