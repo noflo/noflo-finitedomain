@@ -36,10 +36,12 @@ describe 'Finite Domain Constrain Solver', ->
       Gt SPACE -> SPACE Solve
       Solve SOLUTION -> IN Callback(Callback)
       """
-      noflo.graph.loadFBP fbp.trim(), (graph) ->
+      noflo.graph.loadFBP fbp.trim(), (err, graph) ->
+        return done err if err
         graph.baseDir = 'noflo-finitedomain' if noflo.isBrowser()
         graph.baseDir = path.resolve(__dirname, '../') unless noflo.isBrowser()
-        noflo.createNetwork graph, (network) ->
+        noflo.createNetwork graph, (err, network) ->
+          return done err if err
           network.loader.components.Callback = Callback
           network.connect ->
             solutions = 0
