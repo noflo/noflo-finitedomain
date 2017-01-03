@@ -10,12 +10,7 @@
     "type": "git",
     "url": "git://github.com/noflo/noflo-finitedomain.git"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "undefined/blob/master/LICENSE-MIT"
-    }
-  ],
+  "licenses": "MIT",
   "dependencies": {
     "noflo": "~0.6.0",
     "fdjs": "~0.1.0"
@@ -38,7 +33,7 @@
   "scripts": {
     "test": "grunt test"
   },
-  "keywords": [],
+  "keywords": ["noflo"],
   "noflo": {
     "icon": "puzzle-piece",
     "components": {
