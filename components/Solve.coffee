@@ -1,51 +1,51 @@
 noflo = require 'noflo'
 FD = require 'fdjs'
 
-class Solve extends noflo.AsyncComponent
-  description: 'Solve a Finite Domain solving space'
-  constructor: ->
-    @variables = null
-    @distribution = 'fail_first'
-    @search = 'depth_first'
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Solve a Finite Domain solving space'
+  c.inPorts.add 'space',
+    datatype: 'object'
+  c.inPorts.add 'variables',
+    datatype: 'array'
+  c.inPorts.add 'distribution',
+    datatype: 'string'
+    control: true
+    default: 'fail_first'
+  c.inPorts.add 'search',
+    datatype: 'string'
+    control: true
+    default: 'depth_first'
+  c.outPorts.add 'solution',
+    datatype: 'object'
+  c.outPorts.add 'error',
+    datatype: 'object'
+  c.process (input, output) ->
+    return unless input.hasData 'space', 'variables'
+    return if input.attached('distribution').length and not input.hasData 'distribution'
+    return if input.attached('search').length and not input.hasData 'search'
+    [space, variables] = input.getData 'space', 'variables'
+    if typeof variables is 'string'
+      variables = variables.split ','
+    distribution = 'fail_first'
+    if input.hasData 'distribution'
+      distribution = input.getData 'distribution'
+    unless FD.distribute[distribution]
+      output.done new Error "Finite Domain distribution strategy #{distribution} not found"
+      return
+    search = 'depth_first'
+    if input.hasData 'search'
+      search = input.getData 'search'
+    unless FD.search[search]
+      output.done new Error "Finite Domain search strategy #{search} not found"
+      return
+    FD.distribute[distribution] space, variables
 
-    @inPorts =
-      space: new noflo.Port 'object'
-      variables: new noflo.Port 'array'
-      distribution: new noflo.Port 'string'
-      search: new noflo.Port 'string'
-
-    @outPorts =
-      solution: new noflo.Port 'object'
-      error: new noflo.Port 'object'
-
-    @inPorts.variables.on 'data', (variables) =>
-      if typeof variables is 'string'
-        @variables = variables.split ','
-      else
-        @variables = variables
-
-    @inPorts.distribution.on 'data', (distribution) =>
-      unless FD.distribute[distribution]
-        @error new Error "Finite Domain distribution strategy #{distribution} not found"
-        return
-      @distribution = distribution
-    @inPorts.search.on 'data', (search) =>
-      unless FD.search[search]
-        @error new Error "Finite Domain search strategy #{search} not found"
-        return
-      @search = search
-
-    super 'space', 'solution'
-
-  doAsync: (space, callback) ->
-    unless @variables
-      @error new Error 'No variables to solve provided'
-    FD.distribute[@distribution] space, @variables
-
-    step = (state) =>
-      FD.search[@search] state
+    step = (state) ->
+      FD.search[search] state
       if state.space.is_solved()
-        @outPorts.solution.send state.space.solution()
+        output.send
+          solution: state.space.solution()
       if state.more
         # Next solving round
         setTimeout ->
@@ -53,11 +53,13 @@ class Solve extends noflo.AsyncComponent
         , 0
         return
       # We've sent all the solutions out
-      @outPorts.solution.disconnect()
+      output.send
+        solution: new noflo.IP 'closeBracket'
+      output.done()
 
     initialState =
       space: space
       more: yes
+    output.send
+      solution: new noflo.IP 'openBracket'
     step initialState
-
-exports.getComponent = -> new Solve

@@ -12,38 +12,23 @@
   },
   "license": "MIT",
   "dependencies": {
-    "noflo": "0.x >= 0.5",
+    "noflo": "0.x >= 0.8",
     "fdjs": "~0.1.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "coffee-loader": "^0.7.2",
-    "coffee-script": "^1.12.2",
-    "fbp-loader": "^0.1.1",
-    "grunt": "^1.0.1",
-    "grunt-coffeelint": "^0.0.16",
-    "grunt-contrib-coffee": "^1.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-mocha-phantomjs": "^4.0.0",
-    "grunt-mocha-test": "^0.13.2",
-    "grunt-noflo-browser": "^1.0.2",
-    "json-loader": "^0.5.4",
-    "mocha": "^3.2.0"
+    "chai": "^4.1.2",
+    "coffeelint": "^2.0.7",
+    "coffeescript": "^2.0.2",
+    "mocha": "^4.0.1"
   },
   "scripts": {
-    "test": "grunt test"
+    "pretest": "coffeelint -f .coffeelint.json -r components",
+    "test": "mocha --require coffeescript/register -R spec -t 2000 spec/*.coffee"
   },
   "keywords": [
     "noflo"
   ],
   "noflo": {
-    "icon": "puzzle-piece",
-    "components": {
-      "CreateSpace": "components/CreateSpace.coffee",
-      "DeclareVariable": "components/DeclareVariable.coffee",
-      "GreaterThan": "components/GreaterThan.coffee",
-      "Solve": "components/Solve.coffee"
-    }
+    "icon": "puzzle-piece"
   }
 }
