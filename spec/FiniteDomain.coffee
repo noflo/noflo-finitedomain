@@ -5,21 +5,22 @@ unless noflo.isBrowser()
   path = require 'path'
 
 describe 'Finite Domain Constrain Solver', ->
-  class Callback extends noflo.Component
-    constructor: ->
-      @cb = null
-      @end = null
-      @inPorts =
-        in: new noflo.Port
-        callback: new noflo.Port
-        end: new noflo.Port
-      @inPorts.callback.on 'data', (@cb) =>
-      @inPorts.end.on 'data', (@end) =>
-      @inPorts.in.on 'data', (data) =>
-        @cb data
-      @inPorts.in.on 'disconnect', =>
-        @end()
-  Callback.getComponent = -> new Callback
+  Callback = ->
+    c = new noflo.Component
+    c.inPorts.add 'in'
+    c.inPorts.add 'callback'
+    c.inPorts.add 'end'
+    c.forwardBrackets = {}
+    c.process (input, output) ->
+      return unless input.hasData 'callback', 'end'
+      return unless input.hasStream 'in'
+      [end, callback] = input.getData 'end', 'callback'
+      stream = input.getStream 'in'
+      for packet in stream
+        continue unless packet.type is 'data'
+        callback packet.data
+      do end
+      do output.done
 
   describe 'solving a simple inequality constraint', ->
     it 'should be able to solve', (done) ->
@@ -57,5 +58,6 @@ describe 'Finite Domain Constrain Solver', ->
               done()
             , 'Callback', 'end'
             graph.addInitial null, 'Init', 'start'
-            network.start()
+            network.start (err) ->
+              return done err if err
         , true
