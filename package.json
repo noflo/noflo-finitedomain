@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "noflo": "0.x >= 0.5",
+    "noflo": "0.x >= 0.8",
     "fdjs": "~0.1.0"
   },
   "devDependencies": {
@@ -29,12 +29,6 @@
     "noflo"
   ],
   "noflo": {
-    "icon": "puzzle-piece",
-    "components": {
-      "CreateSpace": "components/CreateSpace.coffee",
-      "DeclareVariable": "components/DeclareVariable.coffee",
-      "GreaterThan": "components/GreaterThan.coffee",
-      "Solve": "components/Solve.coffee"
-    }
+    "icon": "puzzle-piece"
   }
 }
